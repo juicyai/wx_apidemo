@@ -1,9 +1,10 @@
 
 import pytest
 
-from wx_api.iniSession import IniSession
+from wx_api.start import Start
 
+"""参数共享"""
 
 @pytest.fixture(scope="session",autouse=True)
-def ini_session():
-    IniSession.create_session()
+def start_():
+    Start.start()

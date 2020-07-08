@@ -6,33 +6,34 @@ import requests
 from utils import parseYaml
 from utils.handleJson import ParseJson
 from utils.parseYaml import ParseYaml
-from wx_api.getToken import GetToken
-from wx_api.iniSession import IniSession
+from wx_api.sessionAndToken import SessionAndToken
 
 #session=requests.session()
+
 class BaseApi:
     log: logging.Logger
+
     def __init__(self):
-        self.log=self.get_logger()
-        self.session:requests.session()=self._session()
+        # self.log=self.get_logger()
+        self.session=self._session()
         #self._session=session
         self._token=self.get_token()
         self.url="https://www.baidu.com",
-
-    @classmethod
-    def get_logger(cls,level=logging.DEBUG):
-        cls.log=logging.getLogger("wx_api")
-        return cls.log
-    @classmethod
-    def get_session(cls):
-        return IniSession
+    #
+    # @classmethod
+    # def get_logger(cls,level=logging.DEBUG):
+    #     cls.log=logging.getLogger("wx_api")
+        # return cls.log
+    # @classmethod
+    # def get_session(cls):
+    #     return IniSession
     @classmethod
     def _session(cls):
-        s=cls.get_session().session
-        return s
+        # IniSession.session
+        return SessionAndToken.session
     @classmethod
     def get_token(cls):
-        return GetToken.get_token()
+        return SessionAndToken._token
     @classmethod
     def get_uid(cls):
         uid=str(time.time()).replace('.','')
@@ -48,7 +49,7 @@ class BaseApi:
         """
         js=ParseJson.readJson(filename)
         tmp=ParseJson.parsejson(str(js),dict)
-        cls.get_logger().debug(tmp)
+        # cls.get_logger().debug(tmp)
         return eval(str(tmp))
 
     method,url,params,json,data="","",None,None,None
@@ -64,21 +65,24 @@ class BaseApi:
     def validate(self,key,expected_value):
 
         #todo:
-        self.reponse.
+
 
         pass
 
     def get(self,url,params=None,**kwargs):
         return requests.get(url,params=params,**kwargs)
     def post(self,url,data=None,json=None,**kwargs):
-        return requests.post(url,data=data,json=json,**kwargs)
+        return self.session.post(url,data=data,json=json,**kwargs)
 
-    @classmethod
-    def set_params():
-        for k,v in params.items():
-            if k=="access-token":
+    # @classmethod
+    # def set_params():
+    #     for k,v in params.items():
+    #         if k=="access-token":
 
-
+if __name__=="__main__":
+ SessionAndToken.create_session().get_token()
+ print(BaseApi().session)
+ print(SessionAndToken.session)
 
 
 

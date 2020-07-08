@@ -5,17 +5,26 @@ import requests
 from utils.parseYaml import ParseYaml
 
 
-class GetToken:
+class SessionAndToken:
     logging.basicConfig(level=logging.INFO)
     _token=""
+    session=None
+
+    @classmethod
+    def create_session(cls):
+        cls.session = requests.session()
+        return cls
     @classmethod
     def get_token(cls):
         corp=ParseYaml.readYaml("corp")["corp"]
         params={"corpid":corp["corpid"],
                 "corpsecret":corp["corpsecret"]
                 }
-        r=requests.get("https://qyapi.weixin.qq.com/cgi-bin/gettoken",params=params)
+        r=cls.session.get("https://qyapi.weixin.qq.com/cgi-bin/gettoken",params=params)
         logging.info(str(r.status_code))
         cls._token=r.json()["access_token"]
         logging.info(cls._token)
-        return cls._token
+        return cls
+
+
+
