@@ -24,5 +24,16 @@ class TestDemo01:
     def test_demo(self):
         r=requests.get("http://www.baidu.com")
         print(r.status_code)
+        i=r.__dict__
+        print("type>>>{}".format(type(i)))
+        header=jsonpath(i,"$.headers")
+        print("h[0]: {}".format(type(header[0])))
+        print("header:{}".format(header))
+        print("server???{}".format(jsonpath(header[0],"$..Server")))
+        for k,v in r.__dict__.items():
+            print("{}:::{}".format(k,v))
+
+        #print(r.__dict__.items())
+        print(type(requests.session()))
 
 

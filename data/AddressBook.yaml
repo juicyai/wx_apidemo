@@ -1,0 +1,8 @@
+create_member:
+  - method: post
+    url: https://qyapi.weixin.qq.com/cgi-bin/user/create
+    params:
+      access-token: $token
+    json: $template
+
+

@@ -29,7 +29,5 @@ class AddressBook(BaseApi):
 
 ab=AddressBook()
 ab.create(name="cosmos",userid=ab.get_uid())
-ab.post()
-abcd
 
 

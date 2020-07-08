@@ -1,0 +1,15 @@
+create_:
+ - method: post
+   url: https://qyapi.weixin.qq.com/cgi-bin/department/create
+   params:
+    access-token: $access_token
+   json : $json
+
+update_:
+ -  method: post
+    url: https://qyapi.weixin.qq.com/cgi-bin/department/update
+    params: #need assist
+     access-token: $access_token
+    json: $json #need assist
+
+
