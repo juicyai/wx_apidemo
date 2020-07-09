@@ -1,9 +1,8 @@
 import logging,json
 import time
 
+from requests.structures import CaseInsensitiveDict
 import requests
-
-from utils import parseYaml
 from utils.handleJson import ParseJson
 from utils.parseYaml import ParseYaml
 from wx_api.sessionAndToken import SessionAndToken
@@ -12,7 +11,7 @@ from wx_api.sessionAndToken import SessionAndToken
 
 class BaseApi:
     log: logging.Logger
-
+    token:str
     def __init__(self):
         # self.log=self.get_logger()
         self.session=self._session()
@@ -53,36 +52,60 @@ class BaseApi:
         return eval(str(tmp))
 
     method,url,params,json,data="","",None,None,None
-    def run(self,filename,method):
-        data_yaml=ParseYaml.readYaml(filename)
 
+    def source(self,filename,meth):
+        self.data_all = ParseYaml.readYaml(filename)  # 读取yaml文件
+        print("data_all:::",self.data_all)
+        #self.data_ls = self.data_all[meth]  # 取出对应的meth参数列表
+        if meth in self.data_all:
+            self.data_ls = self.data_all[meth][0] #todo:联调时需要改进
+            print("data_ls:::", self.data_ls)
+        self.method=str(self.data_ls["method"]).lower() #必选参数
+        self.url=self.data_ls["url"] #必选参数
+        return self
+    def set_params(self,**kwargs):
+            if "params" in self.data_ls:
+                self.params=self.data_ls["params"]
+                for sub in self.params:
+                    if sub=="access_token":
+                        self.params[sub]=self._token
+                    elif sub in kwargs:
+                        self.params[sub]=kwargs[sub]
 
-        self.reponse=self.session.request(self.method,self.url,params=self.params,data=self.data,)
-        #todo:
+                print("param:::",self.params)
+            return self
 
+    def set_json(self,json_data):
+        self.json=json_data
         return self
 
-    def validate(self,key,expected_value):
 
+    def run(self):
+            self.response=self.session.request(self.method,self.url,
+                                               params=self.params,
+                                               json=self.json,data=self.data)
+            return self
+
+    def validate(self,key:str,expected_value):
+        r_:requests.Response=self.response #记录当前的key
+        keys=key.split(".") #取出待比较的value， eg:status_code, header.server
         #todo:
-
-
-        pass
+        for k in keys:
+            if isinstance(r_,requests.Response):
+                r_=getattr(r_,k)
+            elif isinstance(r_,CaseInsensitiveDict):
+                r_=getattr(r_,k)
+        assert r_ == expected_value
+        return self
 
     def get(self,url,params=None,**kwargs):
         return requests.get(url,params=params,**kwargs)
     def post(self,url,data=None,json=None,**kwargs):
-        return self.session.post(url,data=data,json=json,**kwargs)
+        return requests.post(url,data=data,json=json,**kwargs)
 
-    # @classmethod
-    # def set_params():
-    #     for k,v in params.items():
-    #         if k=="access-token":
 
 if __name__=="__main__":
- SessionAndToken.create_session().get_token()
- print(BaseApi().session)
- print(SessionAndToken.session)
-
+    SessionAndToken.create_session().get_token()
+    BaseApi().source("Department", "create_").set_params()
 
 

@@ -8,7 +8,7 @@ from utils.parseYaml import ParseYaml
 class SessionAndToken:
     logging.basicConfig(level=logging.INFO)
     _token=""
-    session=None
+    session:requests.sessions.Session
 
     @classmethod
     def create_session(cls):
@@ -26,5 +26,7 @@ class SessionAndToken:
         logging.info(cls._token)
         return cls
 
-
+if __name__=="__main__":
+    SessionAndToken.create_session()
+    print(type(SessionAndToken.session))
 
