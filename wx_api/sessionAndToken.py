@@ -6,7 +6,11 @@ from utils.parseYaml import ParseYaml
 
 
 class SessionAndToken:
-    logging.basicConfig(level=logging.INFO)
+
+    logging.basicConfig(
+        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+        datefmt='%m/%d/%Y %I:%M:%S %p',
+        level=logging.DEBUG)
     _token=""
     session:requests.sessions.Session
 

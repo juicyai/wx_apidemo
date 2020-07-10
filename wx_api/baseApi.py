@@ -14,6 +14,10 @@ class BaseApi:
     token:str
     def __init__(self):
         # self.log=self.get_logger()
+        logging.basicConfig(
+                            format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+                            datefmt='%m/%d/%Y %I:%M:%S %p',
+                            level = logging.DEBUG)
         self.session=self._session()
         #self._session=session
         self._token=self.get_token()
@@ -51,22 +55,24 @@ class BaseApi:
         # cls.get_logger().debug(tmp)
         return eval(str(tmp))
 
-    method,url,params,json,data="","",None,None,None
+    def ini_request(self): #初始化request参数
+        self.method,self.url,self.params,self.json,self.data="","",None,None,None
 
     def source(self,filename,meth):
+        self.ini_request()
         self.data_all = ParseYaml.readYaml(filename)  # 读取yaml文件
-        print("data_all:::",self.data_all)
+        logging.info(str("data_all:::{}".format(self.data_all)))
         #self.data_ls = self.data_all[meth]  # 取出对应的meth参数列表
         if meth in self.data_all:
             self.data_ls = self.data_all[meth][0] #todo:联调时需要改进
-            print("data_ls:::", self.data_ls)
+            logging.info(str("data_ls:::{}".format(self.data_ls)))
         self.method=str(self.data_ls["method"]).lower() #必选参数
         self.url=self.data_ls["url"] #必选参数
         return self
     def set_params(self,**kwargs):
             if "params" in self.data_ls:
-                self.params=self.data_ls["params"]
-                for sub in self.params:
+                self.params={}
+                for sub in self.data_ls["params"]:
                     if sub=="access_token":
                         self.params[sub]=self._token
                     elif sub in kwargs:
@@ -86,16 +92,22 @@ class BaseApi:
                                                json=self.json,data=self.data)
             return self
 
-    def validate(self,key:str,expected_value):
+    def validate(self,key:str,expected_value): #校验body
         r_:requests.Response=self.response #记录当前的key
         keys=key.split(".") #取出待比较的value， eg:status_code, header.server
         #todo:
         for k in keys:
             if isinstance(r_,requests.Response):
-                r_=getattr(r_,k)
-            elif isinstance(r_,CaseInsensitiveDict):
-                r_=getattr(r_,k)
-        assert r_ == expected_value
+                if k=="json()":
+                    r_=r_.json()
+                else:
+                    r_=getattr(r_,k)
+            elif isinstance(r_,(CaseInsensitiveDict,dict)):
+                r_=r_[k]
+            # elif isinstance(r_,list):
+            #     for ls in r_:
+
+        assert r_ == expected_value,"actual value is:{},while expected_value is {}".format(r_,expected_value)
         return self
 
     def get(self,url,params=None,**kwargs):

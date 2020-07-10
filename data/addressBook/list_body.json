@@ -1,0 +1,67 @@
+{
+  "errcode": 0,
+  "errmsg": "ok",
+  "department": [
+    {
+      "id": 1,
+      "name": "Cosmoskoki2020",
+      "parentid": 0,
+      "order": 100000000
+    },
+    {
+      "id": 2,
+      "name": "\u5e7f\u5dde\u7814\u53d1\u4e2d\u5fc3",
+      "parentid": 1,
+      "order": 1,
+      "name_en": "RDGZ"
+    },
+    {
+      "id": 4,
+      "name": "Cosmic Ray Research Group",
+      "parentid": 1,
+      "order": 99999000
+    },
+    {
+      "id": 3,
+      "name": "\u5b87\u5b99\u5c04\u7ebf\u7814\u7a76\u5c0f\u7ec4",
+      "parentid": 1,
+      "order": 100000000
+    },
+    {
+      "id": 5,
+      "name": "\u5b87\u5b99\u7dda\u7814\u7a76\u30b0\u30eb\u30fc\u30d7",
+      "parentid": 1,
+      "order": 99998000
+    },
+    {
+      "id": 6,
+      "name": "\uc6b0\uc8fc \uad11\uc120 \uc5f0\uad6c \uadf8\ub8f9",
+      "parentid": 1,
+      "order": 99997000
+    },
+    {
+      "id": 7,
+      "name": "\u0645\u062c\u0645\u0648\u0639\u0629 \u0623\u0628\u062d\u0627\u062b \u0627\u0644\u0623\u0634\u0639\u0629 \u0627\u0644\u0643\u0648\u0646\u064a\u0629",
+      "parentid": 1,
+      "order": 99996000
+    },
+    {
+      "id": 8,
+      "name": "Groupe de recherche sur les rayo",
+      "parentid": 1,
+      "order": 0
+    },
+    {
+      "id": 9,
+      "name": "f",
+      "parentid": 1,
+      "order": 0
+    },
+    {
+      "id": 10,
+      "name": "f2",
+      "parentid": 1,
+      "order": 0
+    }
+  ]
+}
