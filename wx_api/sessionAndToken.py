@@ -7,10 +7,17 @@ from utils.parseYaml import ParseYaml
 
 class SessionAndToken:
 
-    logging.basicConfig(
-        format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
-        datefmt='%m/%d/%Y %I:%M:%S %p',
-        level=logging.DEBUG)
+    # logging.basicConfig(
+    #     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+    #     datefmt='%m/%d/%Y %I:%M:%S %p',
+    #     level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+                        datefmt='%m/%d/%Y %I:%M:%S %p')
+    _log = logging.getLogger("wx")
+    _log.setLevel(level=logging.DEBUG)
+
+
+    #使用类变量管理token和session
     _token=""
     session:requests.sessions.Session
 
@@ -25,7 +32,7 @@ class SessionAndToken:
                 "corpsecret":corp["corpsecret"]
                 }
         r=cls.session.get("https://qyapi.weixin.qq.com/cgi-bin/gettoken",params=params)
-        logging.info(str(r.status_code))
+        cls._log.info(str(r.status_code))
         cls._token=r.json()["access_token"]
         logging.info(cls._token)
         return cls

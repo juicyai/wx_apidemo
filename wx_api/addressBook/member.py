@@ -4,36 +4,44 @@ from wx_api.baseApi import BaseApi
 
 
 class Member(BaseApi):
-    logging.basicConfig(level=logging.DEBUG)
+    # logging.basicConfig(level=logging.DEBUG)
 
     def create_(self,**kwargs):
-        url = "https://qyapi.weixin.qq.com/cgi-bin/user/create"
-        params = {
-            "access_token": self._token
-        }
-        logging.debug(params)
-        paylaod = self.get_template("create_body", kwargs)
-        r = self.post(url, params=params, json=paylaod)
-        print(r.status_code)
-        logging.debug(r.status_code)
-        logging.debug(r.json())
-        print(r.json())
-        return r
+        # url = "https://qyapi.weixin.qq.com/cgi-bin/user/create"
+        # params = {
+        #     "access_token": self._token
+        # }
+        # logging.debug(params)
+        if "email" not in kwargs:
+            kwargs["email"]="{}@koki.com".format(self.get_uid())
+        if "mobile" not in kwargs:
+            kwargs["mobile"]=self.get_uid()
+        self.log.info("kw:{}".format(kwargs))
+        json = self.get_template("create_json", kwargs)
+        self.log.info(json)
+        self.source("member","create_").set_params().set_json(json).run()
+        # r = self.post(url, params=params, json=paylaod)
+        # print(r.status_code)
+        # logging.debug(r.status_code)
+        # logging.debug(r.json())
+        # print(r.json())
+        return self
 
-    def get_(self,**kwargs):
-        url = "https://qyapi.weixin.qq.com/cgi-bin/user/get"
-        params = {
-            "access_token": self._token,
-            "userid": "userid"
-        }
-        logging.debug(params)
+    def get_(self,userid):
+        # url = "https://qyapi.weixin.qq.com/cgi-bin/user/get"
+        # params = {
+        #     "access_token": self._token,
+        #     "userid": "userid"
+        # }
+        # logging.debug(params)
         #paylaod = self.get_template("create_body", kwargs)
-        r = self.get(url, params=params)
-        print(r.status_code)
-        logging.debug(r.status_code)
-        logging.debug(r.json())
-        print(r.json())
-        return r
+        self.source("member", "get_").set_params(userid=userid).run()
+        # r = self.get(url, params=params)
+        # print(r.status_code)
+        # logging.debug(r.status_code)
+        # logging.debug(r.json())
+        # print(r.json())
+        return self
     def post_(self,**kwargs):
         url = "https://qyapi.weixin.qq.com/cgi-bin/user/update"
         params = {

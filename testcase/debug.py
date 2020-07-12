@@ -1,4 +1,2 @@
-import requests
 
-r = requests.get("http://www.baidu.com")
-print(r.status_code)
+ for i in range(100):

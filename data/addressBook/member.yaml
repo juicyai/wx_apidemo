@@ -1,0 +1,21 @@
+create_:
+ - method: post
+   url: https://qyapi.weixin.qq.com/cgi-bin/user/create
+   params:
+    access_token: access_token
+   json : $json
+
+get_:
+ -  method: get
+    url: https://qyapi.weixin.qq.com/cgi-bin/user/get
+    params: #need assist
+      access_token: access_token
+      userid: $userid
+    json: $json #need assist
+
+delete_:
+  - method: delete
+    url: https://qyapi.weixin.qq.com/cgi-bin/department/delete
+    params: #need assist
+     access_token: access_token
+     id: $id

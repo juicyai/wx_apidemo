@@ -7,8 +7,8 @@ from wx_api.start import Start
 
 class Department(BaseApi):
 
-    def __init__(self):
-      super().__init__()
+    # def __init__(self):
+    #   super().__init__()
 
     def create_(self,json:dict): #需从外部传入参数
         #url = "https://qyapi.weixin.qq.com/cgi-bin/department/create"
@@ -29,7 +29,7 @@ class Department(BaseApi):
         # logging.debug(r.status_code)
         # logging.debug(r.json())
         # print(r.json())
-        logging.info(str("return json:{}".format(self.response.json())))
+        self.log.info(str("return json:{}".format(self.response.json())))
         return self
 
     def update_(self):
@@ -75,7 +75,7 @@ class Department(BaseApi):
         # }
         # logging.debug(params)
         self.source("Department", "list").set_params(id=id).run()
-        logging.info("list jsonbody:{}".format(json.loads(json.dumps(self.response.json()))))
+        self.log.info("list jsonbody:{}".format(json.loads(json.dumps(self.response.json()))))
         # r = self.post(url, params=params, json=paylaod)
         # print(r.status_code)
         # logging.debug(r.status_code)

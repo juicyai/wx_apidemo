@@ -10,19 +10,24 @@ from wx_api.sessionAndToken import SessionAndToken
 #session=requests.session()
 
 class BaseApi:
-    log: logging.Logger
-    token:str
+    logging.basicConfig(format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+                        datefmt='%m/%d/%Y %I:%M:%S %p')
+    _log = logging.getLogger("wx")
+    _log.setLevel(level=logging.DEBUG)
     def __init__(self):
-        # self.log=self.get_logger()
-        logging.basicConfig(
-                            format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
-                            datefmt='%m/%d/%Y %I:%M:%S %p',
-                            level = logging.DEBUG)
+        # logging.basicConfig(
+        #                     format='%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s - %(message)s',
+        #                     datefmt='%m/%d/%Y %I:%M:%S %p',
+        #                     level = logging.DEBUG)
         self.session=self._session()
         #self._session=session
         self._token=self.get_token()
-        self.url="https://www.baidu.com",
-    #
+        # self.url="https://www.baidu.com"
+
+    @property
+    def log(self):
+        return self._log
+
     # @classmethod
     # def get_logger(cls,level=logging.DEBUG):
     #     cls.log=logging.getLogger("wx_api")
@@ -51,8 +56,9 @@ class BaseApi:
         :return: 使用eval方法将str转换成dict返回
         """
         js=ParseJson.readJson(filename)
+
         tmp=ParseJson.parsejson(str(js),dict)
-        # cls.get_logger().debug(tmp)
+        cls._log.info("js template:{}".format(tmp))
         return eval(str(tmp))
 
     def ini_request(self): #初始化request参数
@@ -61,11 +67,11 @@ class BaseApi:
     def source(self,filename,meth):
         self.ini_request()
         self.data_all = ParseYaml.readYaml(filename)  # 读取yaml文件
-        logging.info(str("data_all:::{}".format(self.data_all)))
+        self.log.info(str("data_all:::{}".format(self.data_all)))
         #self.data_ls = self.data_all[meth]  # 取出对应的meth参数列表
         if meth in self.data_all:
             self.data_ls = self.data_all[meth][0] #todo:联调时需要改进
-            logging.info(str("data_ls:::{}".format(self.data_ls)))
+            self.log.info(str("data_ls:::{}".format(self.data_ls)))
         self.method=str(self.data_ls["method"]).lower() #必选参数
         self.url=self.data_ls["url"] #必选参数
         return self
@@ -78,11 +84,12 @@ class BaseApi:
                     elif sub in kwargs:
                         self.params[sub]=kwargs[sub]
 
-                print("param:::",self.params)
+                self.log.info("param:::",self.params)
             return self
 
     def set_json(self,json_data):
         self.json=json_data
+        self.log.info(self.json)
         return self
 
 

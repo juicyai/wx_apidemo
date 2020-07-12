@@ -1,14 +1,13 @@
 import json
-
 import pytest
-#from jsonschema import validate
 from jsonpath import jsonpath
 from hamcrest import *
 
+from testcase.baseCase import BaseCase
 from wx_api.addressBook.department import Department
 
 
-class TestDepartment:
+class TestDepartment(BaseCase):
 
     @classmethod
     def setup_class(cls):
@@ -46,8 +45,25 @@ class TestDepartment:
     def test_list(self):
         s=self.Department.list().validate("status_code",200)
         j=s.response.json()
+        self.log.info("j type:{}".format(j))
         print("j type:{}".format(type(j)))
-        jsonpath(j,"$..")
+        # jsonpath(j,"$..")
+    @pytest.mark.parametrize("id,expectCode,expectMsg",
+                             [(1000,60123,"invalid party id"),
+                              (10,0,"deleted")
+                              ],ids=["delete_fail","delete_success"])
+    def test_delete(self,id,expectCode,expectMsg):
+        r=self.Department.delete_(id)
+        errcode=r.validate("status_code",200).\
+            validate("json().errcode",expectCode)
+        assert expectMsg in r.response.json()["errmsg"]
+        if errcode==0:
+            j = self.Department.list().validate("status_code", 200).response.json()
+            assert id not in jsonpath(json.loads(json.dumps(j)), "$.department[*].id")
+
+
+
+
 
     def teardown_method(self):
         pass
