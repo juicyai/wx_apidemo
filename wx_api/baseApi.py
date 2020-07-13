@@ -3,6 +3,8 @@ import time
 
 from requests.structures import CaseInsensitiveDict
 import requests
+from requests_toolbelt import MultipartEncoder
+
 from utils.handleJson import ParseJson
 from utils.parseYaml import ParseYaml
 from wx_api.sessionAndToken import SessionAndToken
@@ -62,7 +64,7 @@ class BaseApi:
         return eval(str(tmp))
 
     def ini_request(self): #初始化request参数
-        self.method,self.url,self.params,self.json,self.data="","",None,None,None
+        self.method,self.url,self.params,self.json,self.data,self.headers="","",None,None,None,None
 
     def source(self,filename,meth):
         self.ini_request()
@@ -74,6 +76,13 @@ class BaseApi:
             self.log.info(str("data_ls:::{}".format(self.data_ls)))
         self.method=str(self.data_ls["method"]).lower() #必选参数
         self.url=self.data_ls["url"] #必选参数
+        return self
+
+    def set_headers(self,headers:dict):
+        self.headers=headers
+        return self
+    def set_data(self,data):
+        self.data=data
         return self
     def set_params(self,**kwargs):
             if "params" in self.data_ls:
@@ -91,12 +100,21 @@ class BaseApi:
         self.json=json_data
         self.log.info(self.json)
         return self
+    def get_multipartm(self,fields:dict)->MultipartEncoder:
+        # m=MultipartEncoder(
+        #     fields={'field0': 'value', 'field1': 'value',
+        #             'field2': ('filename', open('file.py', 'rb'), 'text/plain')}
+        # )
+         m=MultipartEncoder(
+            fields=fields
+                )
+         return m
 
 
     def run(self):
             self.response=self.session.request(self.method,self.url,
                                                params=self.params,
-                                               json=self.json,data=self.data)
+                                               json=self.json,data=self.data,headers=self.headers)
             return self
 
     def validate(self,key:str,expected_value): #校验body

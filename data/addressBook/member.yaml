@@ -13,9 +13,35 @@ get_:
       userid: $userid
     json: $json #need assist
 
+update_:
+ - method: post
+   url: https://qyapi.weixin.qq.com/cgi-bin/user/update
+   params:
+    access_token: access_token
+   json : $json
+
 delete_:
-  - method: delete
-    url: https://qyapi.weixin.qq.com/cgi-bin/department/delete
+  - method: get
+    url: https://qyapi.weixin.qq.com/cgi-bin/user/delete
     params: #need assist
      access_token: access_token
-     id: $id
+     userid: $userid
+batchdelete:
+  - method: get
+    url: https://qyapi.weixin.qq.com/cgi-bin/user/batchdelete
+    params: #need assist
+     access_token: access_token
+    json: $json
+simplelist:
+  - method: get
+    url: https://qyapi.weixin.qq.com/cgi-bin/user/simplelist
+    params: #need assist
+      access_token: access_token
+      department_id: $departmentid
+      fetch_child: $fetchchild
+convert_to_openid:
+  -   method: post
+      url: https://qyapi.weixin.qq.com/cgi-bin/user/convert_to_openid
+      params: #need assist
+        access_token: access_token
+      json: $json
