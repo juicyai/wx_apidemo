@@ -84,7 +84,7 @@ class BaseApi:
     def set_data(self,data):
         self.data=data
         return self
-    def set_params(self,**kwargs):
+    def set_params(self,**kwargs): #access_token默认从yaml中读取，需传入其他关键字参数
             if "params" in self.data_ls:
                 self.params={}
                 for sub in self.data_ls["params"]:

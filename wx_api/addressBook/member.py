@@ -133,3 +133,7 @@ class Member(BaseApi):
         # print(r.json())
         self.source("member", "convert_to_openid").set_params().set_json(json).run()
         return self
+    def getUserInfo(self,code):
+        self.source("member","getUserInfo").set_params(code=code).run()
+        return self
+

@@ -39,5 +39,10 @@ class TestMember(BaseCase):
         r=self.m.convert_to_openid(userid).validate("status_code",200)
         self.log.info(r.response.json())
 
+    @pytest.mark.parametrize("code",[12,10000])
+    def test_getuserinfo(self,code):
+        self.m.getUserInfo(code).validate("status_code",200).validate("json().errcode",0)
+
+
 
 

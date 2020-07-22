@@ -1,0 +1,8 @@
+create:
+  - method: post
+    url: https://qyapi.weixin.qq.com/cgi-bin/tag/create
+    params:
+        access_token: access_token
+    json: $json
+
+
