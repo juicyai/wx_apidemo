@@ -6,6 +6,6 @@ authorize:
     redirect_uri:
     response_type:
     scope:
-    
+
 
    json : $json
