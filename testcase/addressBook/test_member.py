@@ -1,14 +1,19 @@
 from testcase.baseCase import BaseCase
 from wx_api.addressBook.department import Department
 from wx_api.addressBook.member import Member
-import pytest
+import pytest,allure
 
 
+@allure.description("member logic test")
+@allure.story("02_member_logic")
+@pytest.mark.testMember
 class TestMember(BaseCase):
 
     @classmethod
     def setup_class(cls):
         cls.m = Member()
+
+    @allure.severity("critical")
     @pytest.mark.parametrize("userid,name",[("zhangshan06","张山"),("xiayu06","夏雨")])
     def test_create(self,userid,name):
 
@@ -19,6 +24,7 @@ class TestMember(BaseCase):
             validate("json().name",name)
         self.log.info(j.response.json())
 
+    @allure.severity("critical")
     @pytest.mark.parametrize("userid,errcode",[("zhangshan",0),("zhangsh",60111)])
     def test_get(self,userid,errcode):
 
@@ -27,6 +33,7 @@ class TestMember(BaseCase):
         errcode=r.response.json()["errcode"]
         if errcode:
            assert "userid not found" in r.response.json()["errmsg"]
+    @allure.severity("major")
     @pytest.mark.parametrize("departmentid,errcode",[(1,0),(100,60003)])
     def test_simplelist(self,departmentid,errcode):
         r=self.m.simplelist(department_id=departmentid).validate("status_code",200).\
@@ -34,11 +41,14 @@ class TestMember(BaseCase):
         if r.response.json()["errcode"]:
             assert "not found" in r.response.json()["errmsg"]
         self.log.info(r.response.json())
+
+    @allure.severity("major")
     @pytest.mark.parametrize("userid",["zhangshan","xiayu"])
     def test_convert_to_openid(self,userid):
         r=self.m.convert_to_openid(userid).validate("status_code",200)
         self.log.info(r.response.json())
 
+    @allure.severity("minor")
     @pytest.mark.parametrize("code",[12,10000])
     def test_getuserinfo(self,code):
         self.m.getUserInfo(code).validate("status_code",200).validate("json().errcode",0)

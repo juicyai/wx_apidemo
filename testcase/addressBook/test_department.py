@@ -1,12 +1,15 @@
 import json
-import pytest
+import pytest,allure
 from jsonpath import jsonpath
 from hamcrest import *
 
 from testcase.baseCase import BaseCase
 from wx_api.addressBook.department import Department
 
-
+@allure.description("department logic test")
+@allure.severity("critical")
+@allure.story("01_department")
+@pytest.mark.departmentTest
 class TestDepartment(BaseCase):
 
     @classmethod
@@ -14,6 +17,7 @@ class TestDepartment(BaseCase):
         cls.Department = Department()
     def setup_method(self):
         pass
+    @allure.severity("critical")
     @pytest.mark.parametrize('name,parentid,errcode',
                              [("宇宙射线研究小组", 3,0),
                               ("Cosmic Ray Research Group", 3,0),
@@ -41,13 +45,15 @@ class TestDepartment(BaseCase):
             assert_that(jsonpath(json.loads(json.dumps(s)),"$.department[*].name"),has_item(name))
             assert_that(jsonpath(json.loads(json.dumps(s)),"$.department[*].parentid",has_item(parentid)))
 
-
+    @allure.severity("major")
     def test_list(self):
         s=self.Department.list().validate("status_code",200)
         j=s.response.json()
         self.log.info("j type:{}".format(j))
         print("j type:{}".format(type(j)))
         # jsonpath(j,"$..")
+
+    @allure.severity("critical")
     @pytest.mark.parametrize("id,expectCode,expectMsg",
                              [(1000,60123,"invalid party id"),
                               (10,0,"deleted")

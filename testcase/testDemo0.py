@@ -1,7 +1,11 @@
-import requests,logging,json,pytest
+import requests,logging,json,pytest,allure
 from jsonpath import *
 from hamcrest import *
+@allure.description("xueqiu _api_test")
+@allure.severity("critical")
+@pytest.mark.test_xueqiu
 class TestDemo01:
+    @allure.severity("critical")
     def test_01(self):
         #logging.basicConfig(level="INFO")
         params={"category": "1"}
@@ -20,7 +24,7 @@ class TestDemo01:
         logging.info(json.dumps(r.json(),indent=2))
         assert_that(jsonpath(r.json(),"$..name"),any_of(has_item("招商银行"),has_item("中国平安")))
         assert "招商银行" or "中国平安" in jsonpath(r.json(),"$..name")
-
+    @allure.severity("minor")
     def test_demo(self):
         #pass
         r=requests.get("http://www.baidu.com")
