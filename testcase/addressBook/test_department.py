@@ -18,6 +18,8 @@ class TestDepartment(BaseCase):
     def setup_method(self):
         pass
     @allure.severity("critical")
+    @allure.testcase("https://baidu.com")
+    @allure.issue("https://baidu.com")
     @pytest.mark.parametrize('name,parentid,errcode',
                              [("宇宙射线研究小组", 3,0),
                               ("Cosmic Ray Research Group", 3,0),
@@ -46,6 +48,8 @@ class TestDepartment(BaseCase):
             assert_that(jsonpath(json.loads(json.dumps(s)),"$.department[*].parentid",has_item(parentid)))
 
     @allure.severity("major")
+    @allure.testcase("https://baidu.com")
+    @allure.issue("https://baidu.com")
     def test_list(self):
         s=self.Department.list().validate("status_code",200)
         j=s.response.json()
@@ -54,6 +58,8 @@ class TestDepartment(BaseCase):
         # jsonpath(j,"$..")
 
     @allure.severity("critical")
+    @allure.testcase("https://baidu.com")
+    @allure.issue("https://baidu.com")
     @pytest.mark.parametrize("id,expectCode,expectMsg",
                              [(1000,60123,"invalid party id"),
                               (10,0,"deleted")
