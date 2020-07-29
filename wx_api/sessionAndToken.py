@@ -17,7 +17,7 @@ class SessionAndToken:
     _log.setLevel(level=logging.DEBUG)
 
 
-    #使用类变量管理token和session
+    #使用类变量管理token和session,实现token和session共享
     _token=""
     session:requests.sessions.Session
 
