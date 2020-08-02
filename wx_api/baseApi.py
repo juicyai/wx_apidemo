@@ -3,7 +3,7 @@ import time
 
 from requests.structures import CaseInsensitiveDict
 import requests
-from requests_toolbelt import MultipartEncoder
+#from requests_toolbelt import MultipartEncoder
 
 from utils.handleJson import ParseJson
 from utils.parseYaml import ParseYaml
@@ -105,10 +105,10 @@ class BaseApi:
         #     fields={'field0': 'value', 'field1': 'value',
         #             'field2': ('filename', open('file.py', 'rb'), 'text/plain')}
         # )
-         m=MultipartEncoder(
-            fields=fields
-                )
-         return m
+        #  m=MultipartEncoder(
+        #     fields=fields
+        #         )
+         return
 
 
     def run(self):
