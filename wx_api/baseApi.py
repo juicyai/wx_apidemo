@@ -100,7 +100,7 @@ class BaseApi:
         self.json=json_data
         self.log.info(self.json)
         return self
-    def get_multipartm(self,fields:dict)->MultipartEncoder:
+    def get_multipartm(self,fields:dict):
         # m=MultipartEncoder(
         #     fields={'field0': 'value', 'field1': 'value',
         #             'field2': ('filename', open('file.py', 'rb'), 'text/plain')}
